@@ -1,5 +1,5 @@
-
-data.raw <- read.csv("VITB6.csv", as.is=TRUE, header=TRUE)
+# Needs work
+data.raw <- read.csv("data/VITB6.csv", as.is=TRUE, header=TRUE)
 
 srm_report <- function (x, max.pts = 100, points = 20) {
         library(rmarkdown)

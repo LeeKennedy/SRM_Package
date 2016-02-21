@@ -1,5 +1,5 @@
 # Rename incoming data file:
-data.in <- read.csv("vib7.csv", as.is=TRUE, header=TRUE)
+data.in <- read.csv("data/SRM_data.csv", as.is=TRUE, header=TRUE)
 library(dplyr)
 library(psych)
 
