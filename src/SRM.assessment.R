@@ -6,10 +6,6 @@ data.raw <- read.csv("data/SRM11E.csv", as.is=TRUE, header=TRUE)
 
 colnames(data.raw)[1] <- "SAMPLE_NUMBER"
 
-
-data.raw <- data.raw %>%
-        filter(SAMPLING_POINT == "SRM11E")
-
 # Input parameters ----------------------------------------------------------------
 
 max.pts <- 200 # Maximum points plotted
@@ -25,6 +21,7 @@ Units <- tolower(sub("_P_","/",(data.raw$REPORTED_UNITS[1])))
 # Clean the data
 data.in <- select(data.raw, everything())%>%
         arrange(SAMPLE_NUMBER)%>%
+        filter(SAMPLE_NUMBER > 4000000)%>%
         select(ASSIGNED_OPERATOR, SAMPLING_POINT, ENTRY)%>%
         mutate(ENTRY = as.numeric(as.character(ENTRY)))%>%
         na.omit
@@ -149,7 +146,7 @@ plot_new <- ggplot(data_new, aes(x=row_n, y=A)) +
         scale_y_continuous(limits = c(0.97*LCL, 1.03*UCL)) +
         annotate("text", x = points+2, y = 1.02*UCL, label = "Control Limits Data") 
 plot_new
-
+ggsave(file.path('graphs', paste(testname,'_', srm,'_Control_Chart.pdf')))
 
 # Histogram of control chart ---------------------------------------------
 hist(data.in3$outliers, 
