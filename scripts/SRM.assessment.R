@@ -1,7 +1,7 @@
 library("ProjectTemplate")
 load.project()
 
-data.raw <- read.csv("data/VIB203.csv", as.is=TRUE, header=TRUE)
+data.raw <- read.csv("data/VITB6.csv", as.is=TRUE, header=TRUE)
 #data.raw <- read_excel("CHLN.xlsx", sheet = 1)
 
 colnames(data.raw)[1] <- "SAMPLE_NUMBER"

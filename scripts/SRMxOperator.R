@@ -1,7 +1,8 @@
 library("ProjectTemplate")
 load.project()
 
-data1 <- read.csv("data/VIB203.csv", as.is=TRUE, header = TRUE)
+data1 <- read.csv("data/VITB6.csv", as.is=TRUE, header = TRUE)
+data.in <- data1
 #Tidying up column names.
 colnames(data1)[1] <- 'Sample'
 colnames(data1)[8] <- 'Result'
@@ -20,10 +21,8 @@ p <- ggplot(data1, aes(x = Sample,y = Result, color = Operator)) +
         theme_bw()
 p
 
+dev.off()
 p + facet_wrap(~ Operator, ncol=2) # individual panels
-
-data.in <- read.csv("data/VIB203.csv", as.is=TRUE, header=TRUE)
-
 
 f3 <- split(data.in$ENTRY, data.in$ASSIGNED_OPERATOR)
 f4 <- lapply(f3, outliers)
@@ -43,3 +42,4 @@ b4 <- cbind(b1, b2, b3c)
 b4 <- as.data.frame(b4)
 
 b4
+
