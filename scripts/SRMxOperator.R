@@ -8,6 +8,8 @@ colnames(data1)[1] <- 'Sample'
 colnames(data1)[8] <- 'Result'
 colnames(data1)[4] <- 'Operator'
 
+testname <- substr(data1$ANALYSIS[1],1,6)
+
 # checking that only one srm present.
 srm_no <- unique(data1$SAMPLING_POINT)
 if (length(srm_no) >1){print("More than one SRM present")}
@@ -20,6 +22,8 @@ p <- ggplot(data1, aes(x = Sample,y = Result, color = Operator)) +
         geom_hline(yintercept = mid_line, lty=2) +
         theme_bw()
 p
+
+ggsave(p, device = NULL, file = paste("~/Documents/GitHub/SRM_Package/graphs/", testname,"_Operators_", Sys.Date(),".png", sep=""))
 
 dev.off()
 p + facet_wrap(~ Operator, ncol=2) # individual panels
