@@ -1,7 +1,9 @@
 library(rmarkdown)
 
+# Data input --------------------------------------------------
 data.raw <- read.csv("C:/Users/lkennedy/GitHub/Git_Projects/SRM_Package/data/SRM115B.csv", as.is=TRUE, header=TRUE)
 
+# Function (don't change) -------------------------------------
 srm_report <- function (x, max.pts = 200, points = 20, doc_type = "docx") {
         code <- substr(x$ANALYSIS[1],1,6)
         print(doc_type)
@@ -26,8 +28,8 @@ srm_report <- function (x, max.pts = 200, points = 20, doc_type = "docx") {
 }
 
 
-
-srm_report (data.raw, max.pts = 200, points = 10, doc_type="html")
+# Run report--------------------------------------------------------------
+srm_report (data.raw, max.pts = 200, points = 10, doc_type="pdf")
 
 
 
