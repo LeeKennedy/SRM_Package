@@ -1,7 +1,7 @@
 library("ProjectTemplate")
 load.project()
 
-data.raw <- read.csv("data/VITB6.csv", as.is=TRUE, header=TRUE)
+data.raw <- read.csv("data/SRM115B.csv", as.is=TRUE, header=TRUE)
 #data.raw <- read_excel("CHLN.xlsx", sheet = 1)
 
 colnames(data.raw)[1] <- "SAMPLE_NUMBER"
@@ -9,7 +9,7 @@ colnames(data.raw)[1] <- "SAMPLE_NUMBER"
 # Input parameters ----------------------------------------------------------------
 
 max.pts <- 200 # Maximum points plotted
-points <- 50   # How many points used to set control lines
+points <- 10   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 
