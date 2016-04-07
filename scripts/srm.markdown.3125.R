@@ -1,6 +1,6 @@
 library(rmarkdown)
 
-data.raw <- read.csv("~/Documents/GitHub/SRM_Package/data/VITB6.csv", as.is=TRUE, header=TRUE)
+data.raw <- read.csv("~/Documents/GitHub/SRM_Package/data/IRM001A.csv", as.is=TRUE, header=TRUE)
 
 srm_report <- function (x, max.pts = 100, points = 20, doc_type = "html") {
         code <- substr(x$ANALYSIS[1],1,6)
@@ -27,4 +27,4 @@ srm_report <- function (x, max.pts = 100, points = 20, doc_type = "html") {
 
 
 
-srm_report (data.raw, max.pts = 200, points = 30, doc_type="docx")
+srm_report (data.raw, max.pts = 2000, points = 30, doc_type="html")

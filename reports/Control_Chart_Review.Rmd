@@ -5,7 +5,7 @@ date: "22 March 2016"
 ---
 
 ```{r, echo=FALSE,message=FALSE}
-#x <- read.csv("~/Documents/GitHub/SRM_Package/data/VITB6.csv", as.is=TRUE, header=TRUE)
+x <- read.csv("~/Documents/GitHub/SRM_Package/data/IRM001A.csv", as.is=TRUE, header=TRUE)
 
 colnames(x)[1] <- "SAMPLE_NUMBER"
 library(dplyr)
@@ -23,8 +23,8 @@ testcode <- paste("Test Code :", testname)
 ```{r echo=FALSE}
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 100 # Maximum points plotted
-points <- 20   # How many points used to set control lines
+max.pts <- 2000 # Maximum points plotted
+points <- 30   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 ```
