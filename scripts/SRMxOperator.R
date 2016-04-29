@@ -44,6 +44,7 @@ b2 <- tapply(f7a$ENTRY, f7a$ASSIGNED_OPERATOR, mean)
 b3c <- tapply(f7a$ENTRY, f7a$ASSIGNED_OPERATOR, sd)
 b4 <- cbind(b1, b2, b3c)
 b4 <- as.data.frame(b4)
+colnames(b4) <- c("n", "Mean", "sd")
 
 b4
 
