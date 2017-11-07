@@ -1,7 +1,22 @@
-library("ProjectTemplate")
-load.project()
+#### Clean Up environment -----------------------------
+rm(list=ls())
 
-data1 <- read.csv("data/VITB6.csv", as.is=TRUE, header = TRUE)
+#### Packages -----------------------------
+library(readxl)
+library(tidyverse)
+library(dts.quality)
+
+#### Functions -----------------------------
+
+shaptest <- function (x) {
+        y = shapiro.test(x)
+        return(y$p.value)
+}
+
+#### Data Input -----------------------------
+
+data1 <- read_excel("~/Desktop/FATS01_2017/FATS01_IRM001B.xlsx")
+
 data.in <- data1
 #Tidying up column names.
 colnames(data1)[1] <- 'Sample'
@@ -28,23 +43,49 @@ ggsave(p, device = NULL, file = paste("~/Documents/GitHub/SRM_Package/graphs/", 
 dev.off()
 p + facet_wrap(~ Operator, ncol=2) # individual panels
 
-f3 <- split(data.in$ENTRY, data.in$ASSIGNED_OPERATOR)
-f4 <- lapply(f3, outliers)
-f5 <- lapply(f4, outliers)
-boxplot(f5, las=2)
-hint <- median(data.in$ENTRY)
-abline(h = hint)
 
-f6 <- unsplit(f5, data.in$ASSIGNED_OPERATOR)
-f7 <- cbind(data.in,f6)
-f7a <- na.omit(f7)
 
-b1 <- tapply(f7a$ENTRY, f7a$ASSIGNED_OPERATOR, length)
-b2 <- tapply(f7a$ENTRY, f7a$ASSIGNED_OPERATOR, mean)
-b3c <- tapply(f7a$ENTRY, f7a$ASSIGNED_OPERATOR, sd)
-b4 <- cbind(b1, b2, b3c)
-b4 <- as.data.frame(b4)
-colnames(b4) <- c("n", "Mean", "sd")
+### ------------------------------------------------
 
-b4
+df4 <- data.in %>% 
+        group_by(ASSIGNED_OPERATOR) %>% 
+        mutate(outliers(ENTRY)) %>% 
+        na.omit() %>% 
+        filter(n() > 2) %>% 
+        summarise(n=n(), Mean= round(mean(ENTRY),2), SD = round(sd(ENTRY),2), p.Value = round(shaptest(ENTRY),3))
+df4
+
+df5 <- data.in %>% 
+        group_by(ASSIGNED_OPERATOR) %>% 
+        mutate(outliers(ENTRY)) %>% 
+        na.omit() %>% 
+        filter(n() > 2) 
+
+
+
+### Histogram of all data ----------------------------------------------------------------
+
+h <- hist(df5$ENTRY, breaks = 50, density = 50,
+          col = "cornflowerblue", xlab = "% Fat", main = "FATS01 IRM001B Results") 
+xfit <- seq(min(df5$ENTRY), max(df5$ENTRY), length = 40) 
+yfit <- dnorm(xfit, mean = mean(df5$ENTRY), sd = sd(df5$ENTRY)) 
+yfit <- yfit * diff(h$mids[1:2]) * length(df5$ENTRY) 
+
+lines(xfit, yfit, col = "black", lwd = 2)
+
+### --------------------------------
+
+df6 <- data.in %>% 
+        filter(ASSIGNED_OPERATOR == "BCHAKMA") %>% 
+        mutate(outliers(ENTRY)) %>% 
+        na.omit() 
+
+
+h <- hist(df6$ENTRY, breaks = 50, density = 50,
+          col = "cornflowerblue", xlab = "% Fat", main = "BCHAKMA FATS01 IRM001B Results") 
+xfit <- seq(min(df6$ENTRY), max(df6$ENTRY), length = 40) 
+yfit <- dnorm(xfit, mean = mean(df6$ENTRY), sd = sd(df6$ENTRY)) 
+yfit <- yfit * diff(h$mids[1:2]) * length(df6$ENTRY) 
+
+lines(xfit, yfit, col = "black", lwd = 2)
 

@@ -5,17 +5,19 @@ date: "8 September 2016"
 ---
 
 ```{r, echo=FALSE,message=FALSE}
-x <- read.csv("/Users/Study Old/Desktop/Control Charts/B1.csv", as.is=TRUE, header=TRUE)
+
+library(psych)
+library(tidyverse)
+library(readxl)
+
+x <- read_excel("~/Desktop/FATS01_2017/FATS01_IRM001B.xlsx")
 
 colnames(x)[1] <- "SAMPLE_NUMBER"
-library(dplyr)
-library(psych)
-library(ggplot2)
 
 testname <- substr(x$ANALYSIS[1],1,6)
 
 Name <- x$REPORTED_NAME[1]
-Units <- tolower(sub("_P_","/",(x$REPORTED_UNITS[1])))
+Units <- tolower(sub("_P_","/",(x$UNITS[1])))
 testcode <- paste("Test Code :", testname)
 ```
 ###`r testcode`
@@ -23,8 +25,8 @@ testcode <- paste("Test Code :", testname)
 ```{r echo=FALSE}
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 50 # Maximum points plotted
-points <- 20   # How many points used to set control lines
+max.pts <- 500 # Maximum points plotted
+points <- 100   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 ```
@@ -239,5 +241,13 @@ Number of control samples run by each operator:
 table(data.in3$Operator)
 ```
 
+```{r}
+shapiro.test(data.in3$A)
+```
 
+
+```{r}
+qqnorm(data.in3$A)
+qqline(data.in3$A, col=2)
+```
 
