@@ -10,7 +10,7 @@ library(psych)
 library(tidyverse)
 library(readxl)
 
-x <- read_excel("~/Desktop/FATS01_2017/FATS01_IRM001B.xlsx")
+x <- read_excel("~/Desktop/FATS01/data/IRM001B.xlsx")
 
 colnames(x)[1] <- "SAMPLE_NUMBER"
 
@@ -231,6 +231,11 @@ print (Clines)
 The results obtained by each operator.  Blue line = mean:
 
 ```{r, echo=FALSE}
+
+data.in3 <- data.in3 %>% 
+        filter(A > (2*LCL-UCL))
+
+
 xx <- boxplot(data.in3$A~data.in3$Operator, las=2, cex.axis = 0.8)
 abline(h=Centre, col = "blue", lty=2, lwd=2)
 ```
