@@ -59,7 +59,7 @@ n <- length(srms)
 #### Visualising Data -----------------------------
 
 srm_data <- srm_data %>% 
-        filter(SRM == srms[2])
+        filter(SRM == srms[1])  # Choose SRM to plot
 
 srm_n <- nrow(srm_data)
 
