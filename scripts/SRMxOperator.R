@@ -4,7 +4,7 @@ rm(list=ls())
 #### Packages -----------------------------
 library(readxl)
 library(tidyverse)
-library(dts.quality)
+library(here)
 
 #### Functions -----------------------------
 
@@ -13,10 +13,38 @@ shaptest <- function (x) {
         return(y$p.value)
 }
 
+outliers <- function (x, b = FALSE) {
+        xx <- sapply(x, as.numeric)
+        
+        #xx <- sort(xx)
+        
+        remove_outliers <- function(x, na.rm = TRUE, ...) {
+                qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+                H <- 1.5 * IQR(x, na.rm = na.rm)
+                y <- x
+                y[x < (qnt[1] - H)] <- NA
+                y[x > (qnt[2] + H)] <- NA
+                y
+        }
+        
+        yy <- remove_outliers(xx)
+        ww <- remove_outliers(yy)
+        zz <- remove_outliers(ww)
+        
+        diff.out <- data.frame(xx, yy, ww, zz)
+        
+        if(b == TRUE){
+                boxplot(diff.out)
+        }
+        
+        return(zz)
+}
+
 #### Data Input -----------------------------
-
-data1 <- read_excel("~/Desktop/FATS01_2017/FATS01_IRM001B.xlsx")
-
+here()
+data1 <- read_excel("data/RMDX.xlsx", col_types = c("numeric", 
+                                                    "date", "text", "text", "text", "text", 
+                                                    "text", "numeric", "text", "text"))
 data.in <- data1
 #Tidying up column names.
 colnames(data1)[1] <- 'Sample'
@@ -24,6 +52,8 @@ colnames(data1)[8] <- 'Result'
 colnames(data1)[4] <- 'Operator'
 
 testname <- substr(data1$ANALYSIS[1],1,6)
+analyte <- data1$REPORTED_NAME[1]
+test_units <- tolower(sub("_P_","/",(data1$UNITS[1])))
 
 # checking that only one srm present.
 srm_no <- unique(data1$SAMPLING_POINT)
@@ -34,11 +64,12 @@ mid_line <- mean(data1$Result)
 ####### Plot by Operators #######
 p <- ggplot(data1, aes(x = Sample,y = Result, fill = Operator)) + 
         geom_point(size=5, alpha = 1, shape=21, colour="black") +
+        labs(title = testname, y=test_units, x="Sample Number")+
         geom_hline(yintercept = mid_line, lty=2) +
         theme_bw()
 p
 
-ggsave(p, device = NULL, file = paste("~/Documents/GitHub/SRM_Package/graphs/", testname,"_Operators_", Sys.Date(),".png", sep=""))
+#ggsave(p, device = NULL, file = paste("~/Documents/GitHub/SRM_Package/graphs/", testname,"_Operators_", Sys.Date(),".png", sep=""))
 
 dev.off()
 p + facet_wrap(~ Operator, ncol=2) # individual panels
@@ -66,7 +97,7 @@ df5 <- data.in %>%
 ### Histogram of all data ----------------------------------------------------------------
 
 h <- hist(df5$ENTRY, breaks = 50, density = 50,
-          col = "cornflowerblue", xlab = "% Fat", main = "FATS01 IRM001B Results") 
+          col = "cornflowerblue", xlab = test_units, main = testname) 
 xfit <- seq(min(df5$ENTRY), max(df5$ENTRY), length = 40) 
 yfit <- dnorm(xfit, mean = mean(df5$ENTRY), sd = sd(df5$ENTRY)) 
 yfit <- yfit * diff(h$mids[1:2]) * length(df5$ENTRY) 
@@ -74,18 +105,4 @@ yfit <- yfit * diff(h$mids[1:2]) * length(df5$ENTRY)
 lines(xfit, yfit, col = "black", lwd = 2)
 
 ### --------------------------------
-
-df6 <- data.in %>% 
-        filter(ASSIGNED_OPERATOR == "BCHAKMA") %>% 
-        mutate(outliers(ENTRY)) %>% 
-        na.omit() 
-
-
-h <- hist(df6$ENTRY, breaks = 50, density = 50,
-          col = "cornflowerblue", xlab = "% Fat", main = "BCHAKMA FATS01 IRM001B Results") 
-xfit <- seq(min(df6$ENTRY), max(df6$ENTRY), length = 40) 
-yfit <- dnorm(xfit, mean = mean(df6$ENTRY), sd = sd(df6$ENTRY)) 
-yfit <- yfit * diff(h$mids[1:2]) * length(df6$ENTRY) 
-
-lines(xfit, yfit, col = "black", lwd = 2)
 

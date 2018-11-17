@@ -1,8 +1,12 @@
+#### Clean Up environment -----------------------------
+rm(list=ls())
+
+### ---------------------------------------------------
 library(tidyverse)
 library(readxl)
 library(psych)
+library(here)
 
-data.raw <- read_excel("C:/Users/leekennedy/Desktop/RMDX.xlsx")
 
 ## Functions -------------------
 outliers <- function (x, b = FALSE) {
@@ -32,6 +36,12 @@ boxplot(diff.out)
 return(zz)
 }
 
+### Data Input -------------------------------------------------------------------
+here()
+data.raw <- read_excel("data/RMDX.xlsx", col_types = c("numeric", 
+                                                       "date", "text", "text", "text", "text", 
+                                                       "text", "numeric", "text", "text"))
+
 
 # Input parameters ----------------------------------------------------------------
 
@@ -43,7 +53,7 @@ points <- 14   # How many points used to set control lines
 testname <- substr(data.raw$ANALYSIS[1],1,6)
 
 Name <- data.raw$REPORTED_NAME[1]
-Units <- tolower(sub("_P_","/",(data.raw$REPORTED_UNITS[1])))
+Units <- tolower(sub("_P_","/",(data.raw$UNITS[1])))
 
 # Clean the data
 data.in <- select(data.raw, everything())%>%
@@ -166,7 +176,7 @@ plot_new <- ggplot(data_new, aes(x=row_n, y=A)) +
         geom_hline(yintercept = LWL, lty = 2, lwd=1,colour = "blue") +
         geom_hline(yintercept = UCL, lty = 2,lwd=1, colour = "red") +
         geom_hline(yintercept = LCL, lty = 2, lwd=1,colour = "red") +
-        geom_vline(xintercept = points, lty = 2, lwd=1,colour = "gray50") +
+        geom_vline(xintercept = points, lty = 1, lwd=0.5,colour = "gray50") +
         theme_bw() +
         labs(x="", y=Name,  title= paste(testname," Control Chart: ", srm,"\n")) +
         theme(plot.title = element_text(size=16)) +
