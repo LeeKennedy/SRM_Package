@@ -1,6 +1,10 @@
-library(readr)
-library(ggplot2)
-library(dplyr)
+#### Clean Up environment -----------------------------
+rm(list=ls())
+
+#### Packages -----------------------------
+library(readxl)
+library(tidyverse)
+library(here)
 library(lubridate)
 
 # Functions -----------------------------------------------------------------------------
@@ -14,9 +18,13 @@ remove.outliers <- function(x, na.rm = TRUE, ...) {
 }
 
 # SRM Data ------------------------------------------------------------------------------
-data <- read_csv("VB12_SRM.csv")
+here::here()
+data <- read_excel("data/VB12_SRM.xlsx", 
+                   col_types = c("numeric", "date", "text", 
+                                 "text", "text", "text", "text", "numeric"))
+
 colnames(data)[1] <- "Sample"
-data$LOGIN_DATE <- dmy_hm(data$LOGIN_DATE)
+#data$LOGIN_DATE <- dmy_hm(data$LOGIN_DATE)
 
 data2 <- data %>%
         arrange(Sample) %>%
@@ -39,9 +47,12 @@ n <- as.numeric(nrow(data2))
 data2 <- data2[, c(9,3,8)]
 
 # Validation Data ----------------------------------------------------------------------
+here()
+data_x <- read_excel("data/B12_Validation.xlsx", 
+                     col_types = c("numeric", "date", "text", 
+                                   "text", "text", "text", "numeric"))
 
-data_x <- read.csv("B12_Validation.csv", as.is = TRUE, header = TRUE)
-data_x$LOGIN_DATE <- dmy(data_x$LOGIN_DATE)
+#data_x$LOGIN_DATE <- dmy(data_x$LOGIN_DATE)
 
 data4 <- data_x %>%
         arrange(LOGIN_DATE) 
