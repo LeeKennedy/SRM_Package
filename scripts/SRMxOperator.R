@@ -42,7 +42,7 @@ outliers <- function (x, b = FALSE) {
 
 #### Data Input -----------------------------
 here()
-data1 <- read_excel("S:/Chemistry/Technical Support Projects/Control Chart Assessments/LACT02_Feb_2019/LACT02_OPS.xlsx", 
+data1 <- read_excel("VITA12_OPS.xlsx", 
                     col_types = c("numeric", "date", "text", 
                                   "text", "text", "text", "text", "numeric", 
                                   "text", "text"))
@@ -90,15 +90,15 @@ p + facet_wrap(~ Operator, ncol=2) # individual panels
 ### ------------------------------------------------
 
 df4 <- data.in %>% 
-        group_by(Operator) %>% 
-        mutate(outliers(Result)) %>% 
+        group_by(ASSIGNED_OPERATOR) %>% 
+        mutate(outliers(ENTRY)) %>% 
         na.omit() %>% 
         filter(n() > 2) %>% 
-        summarise(n=n(), Mean= round(mean(Result),2), SD = round(sd(Result),2), p.Value = round(shaptest(Result),3))
+        summarise(n=n(), Mean= round(mean(ENTRY),2), SD = round(sd(ENTRY),2), p.Value = round(shaptest(ENTRY),3))
 df4
 
 df5 <- data.in %>% 
-        group_by(Operator) %>% 
+        group_by(ASSIGNED_OPERATOR) %>% 
         mutate(outliers(ENTRY)) %>% 
         na.omit() %>% 
         filter(n() > 2) 
