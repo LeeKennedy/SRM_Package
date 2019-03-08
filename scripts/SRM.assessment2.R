@@ -38,15 +38,15 @@ return(zz)
 
 ### Data Input -------------------------------------------------------------------
 here()
-data.raw <- read_excel("data/RMDX.xlsx", col_types = c("numeric", 
+data.raw <- read_excel("data/PHOS01.xlsx", col_types = c("numeric", 
                                                        "date", "text", "text", "text", "text", 
                                                        "text", "numeric", "text", "text"))
 
 
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 200 # Maximum points plotted
-points <- 14   # How many points used to set control lines
+max.pts <- 50 # Maximum points plotted
+points <- 50   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 
