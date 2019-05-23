@@ -38,15 +38,16 @@ return(zz)
 
 ### Data Input -------------------------------------------------------------------
 here()
-data.raw <- read_excel("data/PHOS01.xlsx", col_types = c("numeric", 
-                                                       "date", "text", "text", "text", "text", 
-                                                       "text", "numeric", "text", "text"))
+data.raw <- read_excel("H:/-- In Progress/Control Chart Review/MICP01_P/MICP01_P.xlsx", 
+                       col_types = c("numeric", "date", "text", 
+                                     "text", "text", "text", "text", "numeric", 
+                                     "text", "text"))
 
 
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 50 # Maximum points plotted
-points <- 50   # How many points used to set control lines
+max.pts <- 150 # Maximum points plotted
+points <- 20   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 
@@ -60,8 +61,9 @@ data.in <- select(data.raw, everything())%>%
         arrange(SAMPLE_NUMBER)%>%
         filter(SAMPLE_NUMBER > 4000000)%>%
         select(ASSIGNED_OPERATOR, SAMPLING_POINT, ENTRY)%>%
-        mutate(ENTRY = as.numeric(as.character(ENTRY)))%>%
-        na.omit
+        mutate(ENTRY = as.numeric(as.character(ENTRY)))
+#%>%
+#        na.omit
 
 
 boxplot(data.in$ENTRY~data.in$SAMPLING_POINT,
