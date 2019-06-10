@@ -1,6 +1,8 @@
 ---
 title: "Control Chart Review"
-output: word_document
+output:
+  html_document:
+    df_print: paged
 date: "8 September 2016"
 ---
 
@@ -10,7 +12,10 @@ library(psych)
 library(tidyverse)
 library(readxl)
 
-x <- read_excel("~/Desktop/FATS01/data/IRM001B.xlsx")
+x <- read_excel("~/Desktop/MICP01_P.xlsx", 
+                       col_types = c("numeric", "date", "text", 
+                                     "text", "text", "text", "text", "numeric", 
+                                     "text", "text"))
 
 colnames(x)[1] <- "SAMPLE_NUMBER"
 
@@ -25,8 +30,8 @@ testcode <- paste("Test Code :", testname)
 ```{r echo=FALSE}
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 500 # Maximum points plotted
-points <- 100   # How many points used to set control lines
+max.pts <- 150 # Maximum points plotted
+points <- 30   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 ```
@@ -39,8 +44,7 @@ The recent control samples with this test have been:
 data.in <- select(x, everything())%>%
         arrange(SAMPLE_NUMBER)%>%
         select(ASSIGNED_OPERATOR, SAMPLING_POINT, ENTRY)%>%
-        mutate(ENTRY = as.numeric(as.character(ENTRY)))%>%
-        na.omit
+        mutate(ENTRY = as.numeric(as.character(ENTRY)))
 
 
 boxplot(data.in$ENTRY~data.in$SAMPLING_POINT,
@@ -53,6 +57,10 @@ The following is the most recent control chart (control lines calculated after o
 This chart uses up to the `r max.pts` most recent data points (less if there are not that many points available) and sets the control lines using the first `r points` of them.  If present, green points represent 'one side of the mean' trending error and yellow points represent a 'seven point' increasing or decreasing trend.
 
 ```{r, echo=FALSE,message=FALSE}
+
+data.in <- data.in %>% 
+        filter(SAMPLING_POINT == "IRM001B_CL")
+
 j <- length(unique(data.in$SAMPLING_POINT))
 
 remove.outliers <- function(x, na.rm = TRUE, ...) {
