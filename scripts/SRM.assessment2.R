@@ -38,7 +38,7 @@ return(zz)
 
 ### Data Input -------------------------------------------------------------------
 here()
-data.raw <- read_excel("H:/-- In Progress/Control Chart Review/MICP01_P/MICP01_P.xlsx", 
+data.raw <- read_excel("~/Desktop/MICP01_P.xlsx", 
                        col_types = c("numeric", "date", "text", 
                                      "text", "text", "text", "text", "numeric", 
                                      "text", "text"))
@@ -47,7 +47,7 @@ data.raw <- read_excel("H:/-- In Progress/Control Chart Review/MICP01_P/MICP01_P
 # Input parameters ----------------------------------------------------------------
 
 max.pts <- 150 # Maximum points plotted
-points <- 20   # How many points used to set control lines
+points <- 30   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ Units <- tolower(sub("_P_","/",(data.raw$UNITS[1])))
 # Clean the data
 data.in <- select(data.raw, everything())%>%
         arrange(SAMPLE_NUMBER)%>%
-        filter(SAMPLE_NUMBER > 4000000)%>%
+        filter(SAMPLING_POINT == "IRM001B_CL")%>%
         select(ASSIGNED_OPERATOR, SAMPLING_POINT, ENTRY)%>%
         mutate(ENTRY = as.numeric(as.character(ENTRY)))
 #%>%
@@ -189,7 +189,7 @@ ggsave(file.path('graphs', paste(testname,'_', srm,'_Control_Chart.png')), width
 
 # Histogram of control chart ---------------------------------------------
 hist(data.in3$outliers, 
-     breaks=20, 
+     breaks=50, 
      xlab=srm,
      main = paste("Control Chart",srm,"data distribution"))
 abline(v = Centre, col = "red", lty = 2)
