@@ -38,11 +38,10 @@ return(zz)
 
 ### Data Input -------------------------------------------------------------------
 here()
-data.raw <- read_excel("~/Desktop/MICP01_P.xlsx", 
+data.raw <- read_excel("data/MICP01_P.xlsx", 
                        col_types = c("numeric", "date", "text", 
                                      "text", "text", "text", "text", "numeric", 
                                      "text", "text"))
-
 
 # Input parameters ----------------------------------------------------------------
 
@@ -207,4 +206,14 @@ mytable
 table(data.in3$Operator)
 
 
+### ggplot of control chart ----------------------------------------
+
+raw_hist <- ggplot(data.in, aes(x=ENTRY)) +
+        geom_histogram(fill="cornflowerblue", col = "grey50") +
+        theme_bw()+
+        theme(panel.grid.major = element_line(size = 0.5, color = "grey"), 
+        axis.line = element_line(size = 0.7, color = "black"), 
+        text = element_text(size = 14), axis.text.x = element_text(angle = 0, hjust = 1))
+        
+raw_hist
 
