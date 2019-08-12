@@ -42,7 +42,7 @@ outliers <- function (x, b = FALSE) {
 
 #### Data Input -----------------------------
 here()
-data1 <- read_excel("data/PHOS01.xlsx", 
+data1 <- read_excel("CARN01_CC.xlsx", 
                     col_types = c("numeric", "date", "text", 
                                   "text", "text", "text", "text", "numeric", 
                                   "text", "text"))
