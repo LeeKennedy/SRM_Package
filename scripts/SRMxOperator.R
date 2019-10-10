@@ -42,7 +42,7 @@ outliers <- function (x, b = FALSE) {
 
 #### Data Input -----------------------------
 here()
-data1 <- read_excel("CARN01_CC.xlsx", 
+data1 <- read_excel("data/CHLN03.xlsx", 
                     col_types = c("numeric", "date", "text", 
                                   "text", "text", "text", "text", "numeric", 
                                   "text", "text"))
@@ -85,6 +85,7 @@ p
 dev.off()
 p + facet_wrap(~ Operator, ncol=2) # individual panels
 
+ggsave("graphs/Operators_CHLN03.png", width=12, height=8, dpi=100)
 
 
 ### ------------------------------------------------
