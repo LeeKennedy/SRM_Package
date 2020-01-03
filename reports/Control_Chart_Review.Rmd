@@ -3,7 +3,7 @@ title: "Control Chart Review"
 output:
   html_document:
     df_print: paged
-date: "8 September 2016"
+date: "3 January 2020"
 ---
 
 ```{r, echo=FALSE,message=FALSE}
@@ -12,7 +12,7 @@ library(psych)
 library(tidyverse)
 library(readxl)
 
-x <- read_excel("~/Desktop/MICP01_P.xlsx", 
+x <- read_excel("C:/Users/leekennedy/Documents/GitHub/SRM_Package/data/VITA12.xlsx", 
                        col_types = c("numeric", "date", "text", 
                                      "text", "text", "text", "text", "numeric", 
                                      "text", "text"))
@@ -30,8 +30,8 @@ testcode <- paste("Test Code :", testname)
 ```{r echo=FALSE}
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 150 # Maximum points plotted
-points <- 30   # How many points used to set control lines
+max.pts <- 400 # Maximum points plotted
+points <- 60   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 ```
@@ -59,7 +59,7 @@ This chart uses up to the `r max.pts` most recent data points (less if there are
 ```{r, echo=FALSE,message=FALSE}
 
 data.in <- data.in %>% 
-        filter(SAMPLING_POINT == "IRM001B_CL")
+        filter(SAMPLING_POINT == "IRM001B")
 
 j <- length(unique(data.in$SAMPLING_POINT))
 
@@ -244,7 +244,10 @@ data.in3 <- data.in3 %>%
         filter(A > (2*LCL-UCL))
 
 
-xx <- boxplot(data.in3$A~data.in3$Operator, las=2, cex.axis = 0.8)
+xx <- boxplot(data.in3$A~data.in3$Operator, 
+              las=2, cex.axis = 0.8, 
+              xlab = "", 
+              ylab = "Result")
 abline(h=Centre, col = "blue", lty=2, lwd=2)
 ```
 
@@ -254,13 +257,9 @@ Number of control samples run by each operator:
 table(data.in3$Operator)
 ```
 
-```{r}
+```{r, echo = FALSE}
 shapiro.test(data.in3$A)
 ```
 
 
-```{r}
-qqnorm(data.in3$A)
-qqline(data.in3$A, col=2)
-```
 

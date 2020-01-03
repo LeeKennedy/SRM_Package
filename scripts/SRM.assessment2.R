@@ -38,15 +38,15 @@ return(zz)
 
 ### Data Input -------------------------------------------------------------------
 here()
-data.raw <- read_excel("data/MICP01_P.xlsx", 
+data.raw <- read_excel("data/VITA12.xlsx", 
                        col_types = c("numeric", "date", "text", 
                                      "text", "text", "text", "text", "numeric", 
                                      "text", "text"))
 
 # Input parameters ----------------------------------------------------------------
 
-max.pts <- 150 # Maximum points plotted
-points <- 30   # How many points used to set control lines
+max.pts <- 350 # Maximum points plotted
+points <- 50   # How many points used to set control lines
 
 # ---------------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ Units <- tolower(sub("_P_","/",(data.raw$UNITS[1])))
 # Clean the data
 data.in <- select(data.raw, everything())%>%
         arrange(SAMPLE_NUMBER)%>%
-        filter(SAMPLING_POINT == "IRM001B_CL")%>%
+        filter(SAMPLING_POINT == "IRM001B")%>%
         select(ASSIGNED_OPERATOR, SAMPLING_POINT, ENTRY)%>%
         mutate(ENTRY = as.numeric(as.character(ENTRY)))
 #%>%
