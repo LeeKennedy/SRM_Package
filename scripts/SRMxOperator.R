@@ -42,13 +42,13 @@ outliers <- function (x, b = FALSE) {
 
 #### Data Input -----------------------------
 here()
-data1 <- read_excel("data/CHLN03.xlsx", 
+data1 <- read_excel("C:/Users/leekennedy/Desktop/In Progress/PVAL Investigation MG_SDA/PVAL_OPS.xlsx", 
                     col_types = c("numeric", "date", "text", 
                                   "text", "text", "text", "text", "numeric", 
                                   "text", "text"))
 
 ###  Tidying the data affter first screen through the plot ---------------
-# data1 <- data1 %>% filter(ENTRY <10) %>%  filter(SAMPLING_POINT == "SRM59AJ")
+# data1 <- data1 %>% filter(ENTRY <100) %>%  filter(SAMPLING_POINT == "SRM21O")
 
 
 ### Reducing to the LW control chart limits of 50 data points -------------
@@ -77,7 +77,10 @@ p <- ggplot(data1, aes(x = Sample,y = Result, fill = Operator)) +
         geom_point(size=5, alpha = 1, shape=21, colour="black") +
         labs(title = testname, y=test_units, x="Sample Number")+
         geom_hline(yintercept = mid_line, lty=2) +
-        theme_bw()
+        theme_bw() +
+        theme(panel.grid.major = element_line(size = 0.5, color = "grey"), 
+        axis.line = element_line(size = 0.7, color = "black"), 
+        text = element_text(size = 14), axis.text.x = element_text(angle = 0, hjust = 1))
 p
 
 #ggsave(p, device = NULL, file = paste("~/Documents/GitHub/SRM_Package/graphs/", testname,"_Operators_", Sys.Date(),".png", sep=""))
