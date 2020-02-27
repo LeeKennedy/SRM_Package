@@ -73,8 +73,8 @@ if (length(srm_no) >1){print("More than one SRM present")}
 mid_line <- mean(data1$Result)
 
 ####### Plot by Operators #######
-p <- ggplot(data1, aes(x = Sample,y = Result, fill = Operator)) + 
-        geom_point(size=5, alpha = 1, shape=21, colour="black") +
+p <- ggplot(data1, aes(x = LOGIN_DATE,y = Result, fill = Operator)) + 
+        geom_point(size=4, alpha = 1, shape=21, colour="black") +
         labs(title = testname, y=test_units, x="Sample Number")+
         geom_hline(yintercept = mid_line, lty=2) +
         theme_bw() +
