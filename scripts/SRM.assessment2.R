@@ -3,6 +3,7 @@ rm(list=ls())
 
 ### ---------------------------------------------------
 library(tidyverse)
+library(LK.Toolbox)
 library(readxl)
 library(psych)
 library(here)
@@ -38,7 +39,7 @@ return(zz)
 
 ### Data Input -------------------------------------------------------------------
 here()
-data.raw <- read_excel("data/VITA12.xlsx", 
+data.raw <- read_excel("C:/Users/leekennedy/Desktop/In Progress/FATS01.xlsx", 
                        col_types = c("numeric", "date", "text", 
                                      "text", "text", "text", "text", "numeric", 
                                      "text", "text"))
@@ -217,3 +218,12 @@ raw_hist <- ggplot(data.in, aes(x=ENTRY)) +
         
 raw_hist
 
+### --------- Summary -----------------
+
+all_data <- data.in %>% 
+        group_by(ASSIGNED_OPERATOR) %>% 
+        mutate(ENTRY = outliers(ENTRY)) %>% 
+        na.omit() %>% 
+        summarise(n=n(), Mean = mean(ENTRY), SD = sd(ENTRY)) %>% 
+        arrange(SD)
+all_data
