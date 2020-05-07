@@ -36,7 +36,7 @@ outliers <- function (x, b = FALSE) {
         return(zz)
 }
 #### Data Input -----------------------------
-here()
+here::here()
 
 data <- read_excel("data/VITD_SRM.xlsx", 
                    col_types = c("numeric", "date", "text", 

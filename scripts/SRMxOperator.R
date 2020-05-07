@@ -42,7 +42,7 @@ outliers <- function (x, b = FALSE) {
 
 #### Data Input -----------------------------
 here::here()
-data1 <- read_excel("C:/Users/leekennedy/Desktop/In Progress/FATS01.xlsx", 
+data1 <- read_excel("data/VITA12_SRM.xlsx", 
                     col_types = c("numeric", "date", "text", 
                                   "text", "text", "text", "text", "numeric", 
                                   "text", "text"))
