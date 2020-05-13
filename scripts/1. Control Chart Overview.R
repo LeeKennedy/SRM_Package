@@ -14,7 +14,7 @@ library(here)
 #### Data Input -----------------------------
 here::here()
 
-irm_data <- read_excel("data/VITA12_SRM.xlsx", 
+irm_data <- read_excel("~/Documents/GitHub/zData_Files/SRM_Package_Data/Inputs/VITA12_SRM.xlsx", 
                    col_types = c("numeric", "date", "text", 
                                  "text", "text", "text", "text", "numeric", 
                                  "text", "text"))
