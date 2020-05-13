@@ -17,7 +17,7 @@ shaptest <- function (x) {
 
 #### Data Input -----------------------------
 here::here()
-irm_ops <- read_excel("data/VITA12_SRM.xlsx", 
+irm_ops <- read_excel("~/Documents/GitHub/zData_Files/SRM_Package_Data/Inputs/VITA12_SRM.xlsx", 
                     col_types = c("numeric", "date", "text", 
                                   "text", "text", "text", "text", "numeric", 
                                   "text", "text"))
@@ -66,7 +66,7 @@ p <- ggplot(irm_ops, aes(x = LOGIN_DATE,y = Result, fill = Operator)) +
         text = element_text(size = 14), axis.text.x = element_text(angle = 0, hjust = 1))
 p
 
-#ggsave(p, device = NULL, file = paste("~/Documents/GitHub/SRM_Package/graphs/", testname,"_Operators_", Sys.Date(),".png", sep=""))
+# ggsave(p, device = NULL, file = paste("~/Documents/GitHub/zData_Files/SRM_Package_Data/Outputs/", testname,"_Operators_", Sys.Date(),".png", sep=""))
 
 dev.off()
 p + facet_wrap(~ Operator, ncol=2) # individual panels
