@@ -32,16 +32,30 @@ if("Darwin" %in% Sys.info()['sysname'] == TRUE){
 
 #### Data Cleaning -----------------------------
 
-control_limits <- data %>% 
-        group_by(SAMPLING_POINT, REPORTED_NAME, UNITS) %>% 
+data1 <- data %>%
+        filter(SAMPLING_POINT == "SRM45G_CL")
+
+z_scores <- data1 %>% 
+        filter(REPORTED_NAME %in% c("Lead", "Cadmium", "Arsenic", "Chromium", "Tin")) %>% 
+        group_by(REPORTED_NAME) %>% 
         mutate(ENTRY = outliers(ENTRY)) %>% 
         na.omit() %>% 
-        summarise(n=n(), Mean = mean(ENTRY), LCL = Mean - 3*sd(ENTRY), LWL = Mean - 2*sd(ENTRY), UWL = Mean + 2*sd(ENTRY), UCL = Mean + 3*sd(ENTRY))
-control_limits
+        mutate(z_score = (ENTRY - mean(ENTRY))/sd(ENTRY))
 
-write.csv(control_limits, "~/Documents/GitHub/zData_Files/SRM_Package_Data/Outputs/ICPM01_IRMSRM_Limits.csv")
+testz <- as.data.frame(z_scores[, c(1,6,11)])
+
+testz_wide <- pivot_wider(testz, names_from = "REPORTED_NAME", values_from = "z_score")
+testz_wide <- testz_wide[,-1]
+plot(testz_wide)
 
 #### Visualising Data -----------------------------
 
-x <- shapiro.test(control_limits$Mean)
-str(x)
+z_plot <- ggplot(z_scores, aes(x = LOGIN_DATE, y = z_score, fill = REPORTED_NAME))+
+        geom_point(size = 3, shape = 21)+
+        geom_line()+
+        theme_bw() +
+        theme(panel.grid.major = element_line(size = 0.5, color = "grey"), 
+        axis.line = element_line(size = 0.7, color = "black"), 
+        text = element_text(size = 14), axis.text.x = element_text(angle = 0, hjust = 1)) 
+
+z_plot
