@@ -1,7 +1,7 @@
-#### Clean Up environment -----------------------------
+#### Clean Up environment -------------------------------------
 rm(list=ls())
 
-#### Packages -----------------------------
+#### Packages -------------------------------------------------
 library(readxl)
 library(tidyverse)
 library(LK.Toolbox)
@@ -9,10 +9,10 @@ library(lubridate)
 library(here)
 
 
-#### Functions -----------------------------
+#### Functions ------------------------------------------------
 
 
-#### Data Input -----------------------------
+#### Data Input -----------------------------------------------
 here::here()
 
 
@@ -31,11 +31,13 @@ if("Darwin" %in% Sys.info()['sysname'] == TRUE){
 
 
 
-#### Data Cleaning -----------------------------
-
+#### Data Cleaning --------------------------------------------
+#### Collecting ID data ---------------------------------------
 data1 <- data %>%
         filter(SAMPLING_POINT == "IRM001B_CL") %>% 
         filter(LOGIN_DATE > "2020-04-01")
+
+#### Keeping a copy of the raw data ---------------------------
 data1$RAW_ENTRY <- data1$ENTRY
 
 test <- data1$ANALYSIS[1]
@@ -45,7 +47,7 @@ chart_id <- paste(test, irm, sep="_")
 start_date <- data1$LOGIN_DATE[1]
 start_date <- date(start_date)
 
-
+#### Creating z Scores on raw data based on cleaned data ------
 
 z_scores <- data1 %>% 
         group_by(REPORTED_NAME) %>% 
@@ -54,9 +56,7 @@ z_scores <- data1 %>%
         mutate(z_score = (RAW_ENTRY - mean(ENTRY, na.rm = TRUE))/sd(ENTRY, na.rm = TRUE)) 
 
 
-write.csv(z_scores, "temp.csv")
-#### Visualising Data -----------------------------
-
+#### Assigning ranges to z scores -----------------------------
 
 z_scores <- z_scores %>% mutate(CC_group = case_when(z_score > 3  ~ '>3',
                                                     z_score > 2  & z_score <= 3 ~ '2 to 3',
@@ -64,16 +64,16 @@ z_scores <- z_scores %>% mutate(CC_group = case_when(z_score > 3  ~ '>3',
                                                     z_score > -3  & z_score <= -2 ~ '-2 to -3',
                                                     z_score  < 3 ~ '<3'))
 
+#### Converting ranges to factors------------------------------
 z_scores$CC_group <- factor(z_scores$CC_group, levels = c('>3', '2 to 3', '-2 to 2', '-2 to -3', '<3'))
 
-
+#### Visualising Data -----------------------------------------
 
 multi_plot <- ggplot(z_scores, aes(x = NAME, y = REPORTED_NAME, group = 1)) +
-        geom_point(aes(shape = CC_group, size = CC_group, fill = CC_group)) +
-        scale_fill_manual(values = c("red", "coral", "green3", "coral", "red")) +
+        geom_point(aes(shape = CC_group, fill = CC_group), size = 4) +
         scale_shape_manual(values = c(24, 24, 21, 25, 25)) +
-        scale_size_manual(values = c(4,3,1,3,4)) +
-        labs(title = chart_id, subtitle = paste("Since:",start_date, sep = " "), y = "", x="")+
+        scale_fill_manual(values = c("red", "cornflowerblue", "white", "cornflowerblue", "red")) +
+        labs(title = chart_id, subtitle = paste("Since:",start_date, sep = " "), y = "", x="") +
         theme_bw() +
         theme(panel.grid.major = element_line(size = 0.5, color = "grey"), 
         axis.line = element_line(size = 0.7, color = "black"), 
